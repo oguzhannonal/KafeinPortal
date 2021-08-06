@@ -13,8 +13,9 @@ namespace KafeinPortal.Data.Model.Models
         public int CustomerId { get; set; }
         public string Name { get; set; }
         
-        
+        [NotMapped]
         public virtual ProjectDetail ProjectDetails{ get; set; }
+        [NotMapped]
         public virtual Customer Customer { get; set; }
     }
 }

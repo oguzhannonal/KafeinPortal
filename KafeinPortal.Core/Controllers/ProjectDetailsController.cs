@@ -20,7 +20,7 @@ namespace KafeinPortal.Core.Controllers
         private readonly ILogger<ProjectDetailsController> _logger;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRepository<ProjectDetail> _projectDetail;
-        private readonly IRepository<Project> _project;
+        
         private readonly EfContext _dbContext;
 
         public ProjectDetailsController(IUnitOfWork unitOfWork, ILogger<ProjectDetailsController> logger, IRepository<ProjectDetail> projectDetail,EfContext dbcontext)
@@ -82,11 +82,6 @@ namespace KafeinPortal.Core.Controllers
                 _logger.LogDebug("Debug message called AddProjectdetail method ProjectdetailsController");
                 _logger.LogInformation("called AddProjectdetail method ProjectdetailsController");
                 _projectDetail.Add(projectDetail);
-               
-
-
-
-
                 _unitOfWork.SaveChanges();
                 ApiResponse apiResponse = new ApiResponse(HttpStatusCode.OK, true, "Proje Detaylari Eklendi.", projectDetail);
                 return apiResponse;

@@ -22,9 +22,9 @@ namespace KafeinPortal.Data.Context
                 .WithMany(g => g.Projects)
                 .HasForeignKey(s => s.CustomerId);
 
-            modelBuilder.Entity<ProjectDetail>()
-                .HasOne<Project>(s => s.Project)
-                .WithOne(g => g.ProjectDetails)
+            modelBuilder.Entity<Project>()
+                .HasOne<ProjectDetail>(s => s.ProjectDetails)
+                .WithOne(g => g.Project)
                 .HasForeignKey<ProjectDetail>(s => s.ProjectId);
             
                

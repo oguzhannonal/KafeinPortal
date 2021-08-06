@@ -94,7 +94,7 @@ namespace KafeinPortal.Core.Controllers
             }
 
 
-        }
+            }
         [HttpDelete("{id:int}", Name = "DeleteProject")]
         public ActionResult<ApiResponse> DeleteProject(int id)
         {
