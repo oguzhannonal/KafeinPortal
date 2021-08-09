@@ -9,8 +9,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace KafeinPortal.Data.Migrations
 {
     [DbContext(typeof(EfContext))]
-    [Migration("20210806093249_falanfilan1")]
-    partial class falanfilan1
+    [Migration("20210806112445_falan")]
+    partial class falan
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

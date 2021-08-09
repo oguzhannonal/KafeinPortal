@@ -3,7 +3,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace KafeinPortal.Data.Migrations
 {
-    public partial class falanfilan1 : Migration
+    public partial class falan : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

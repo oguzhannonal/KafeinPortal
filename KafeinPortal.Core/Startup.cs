@@ -39,6 +39,7 @@ namespace KafeinPortal.Core
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
+
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "KafeinPortal.Core", Version = "v1" });
             });
         }
