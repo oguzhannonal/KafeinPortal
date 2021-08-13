@@ -28,7 +28,7 @@ namespace KafeinPortal.Data.Repositories
             var transaction = _efContext.Database.BeginTransaction();
             try
             {
-                 
+
 
                 var affectedRow = _efContext.SaveChanges();
                 transaction.Commit();
@@ -41,7 +41,7 @@ namespace KafeinPortal.Data.Repositories
                 return -1;
             }
         }
-        
+
         public void Dispose()
         {
             Dispose(true);

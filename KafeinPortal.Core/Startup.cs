@@ -30,6 +30,7 @@ namespace KafeinPortal.Core
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAutoMapper(typeof(Startup));
             services.AddEntityFrameworkNpgsql().AddDbContext<EfContext>(opt => opt.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
@@ -37,6 +38,7 @@ namespace KafeinPortal.Core
             services.AddControllers().AddJsonOptions(x =>
    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
             services.AddControllers();
+            
             services.AddSwaggerGen(c =>
             {
 

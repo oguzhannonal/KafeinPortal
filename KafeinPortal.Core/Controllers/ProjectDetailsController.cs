@@ -6,9 +6,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.Extensions.Logging;
 using KafeinPortal.Data.Model.Models;
 using KafeinPortal.Data.Context;
+using KafeinPortal.Core.Responses;
+using KafeinPortal.Core.Requests;
 
 namespace KafeinPortal.Core.Controllers
 {
@@ -20,15 +23,17 @@ namespace KafeinPortal.Core.Controllers
         private readonly ILogger<ProjectDetailsController> _logger;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRepository<ProjectDetail> _projectDetail;
+        private readonly IMapper _mapper;
         
         private readonly EfContext _dbContext;
 
-        public ProjectDetailsController(IUnitOfWork unitOfWork, ILogger<ProjectDetailsController> logger, IRepository<ProjectDetail> projectDetail,EfContext dbcontext)
+        public ProjectDetailsController(IUnitOfWork unitOfWork,IMapper mapper , ILogger<ProjectDetailsController> logger, IRepository<ProjectDetail> projectDetail,EfContext dbcontext)
         {
             _projectDetail = projectDetail;
             _logger = logger;
             _unitOfWork = unitOfWork;
             _dbContext = dbcontext;
+            _mapper = mapper;
         }
         [HttpGet]
         public ActionResult<ApiResponse> Get()
@@ -36,8 +41,10 @@ namespace KafeinPortal.Core.Controllers
 
             try
             {
+                var projectDetails = _projectDetail.GetAll();
+                var projectDetailsResponse = _mapper.Map<List<ProjectDetailsResponse>>(projectDetails);
                 _logger.LogInformation("Called Get method WeatherForecastController");
-                ApiResponse apiResponse = new ApiResponse(HttpStatusCode.OK, true, "Tüm Projeler detayları geldi.", _projectDetail.GetAll().ToList());
+                ApiResponse apiResponse = new ApiResponse(HttpStatusCode.OK, true, "Tüm Projeler detayları geldi.",projectDetailsResponse);
                 _logger.LogDebug("Debug message called get method ProjectdetailsController");
 
                 return apiResponse;
@@ -58,8 +65,9 @@ namespace KafeinPortal.Core.Controllers
             {
                 _logger.LogDebug("Debug message called getprojectdetail method ProjectdetailsController");
                 _logger.LogInformation("called getprojectdetail method ProjectdetailsController");
-
-                ApiResponse apiResponse = new ApiResponse(HttpStatusCode.OK, true, "Tek bir proje detayı geldi.", _projectDetail.Get(s => s.Id == id));
+                var projectDetail =_projectDetail.Get(s => s.Id == id);
+                var projectResponse = _mapper.Map<ProjectDetailsResponse>(projectDetail);
+                ApiResponse apiResponse = new ApiResponse(HttpStatusCode.OK, true, "Tek bir proje detayı geldi.",projectResponse);
 
                 return apiResponse;
 
@@ -72,7 +80,7 @@ namespace KafeinPortal.Core.Controllers
 
         }
         [HttpPost]
-        public ActionResult<ApiResponse> AddProjectDetail(ProjectDetail projectDetail)
+        public ActionResult<ApiResponse> AddProjectDetail(ProjectDetailsRequest projectDetailsRequest)
         {
 
 
@@ -81,6 +89,7 @@ namespace KafeinPortal.Core.Controllers
             {
                 _logger.LogDebug("Debug message called AddProjectdetail method ProjectdetailsController");
                 _logger.LogInformation("called AddProjectdetail method ProjectdetailsController");
+                var projectDetail = _mapper.Map<ProjectDetail>(projectDetailsRequest);
                 _projectDetail.Add(projectDetail);
                 _unitOfWork.SaveChanges();
                 ApiResponse apiResponse = new ApiResponse(HttpStatusCode.OK, true, "Proje Detaylari Eklendi.", projectDetail);
@@ -104,10 +113,11 @@ namespace KafeinPortal.Core.Controllers
                 _logger.LogDebug("Debug message called DeleteProjectDetails method ProjectdetailsController");
                 _logger.LogInformation("called DeleteProjectDetails method ProjectdetailsController");
                 var deletedProject = _projectDetail.Get(s => s.Id == id);
+                var projectDetailsResponse = _mapper.Map<ProjectDetailsResponse>(deletedProject);
 
                 _projectDetail.Delete(deletedProject);
                 _unitOfWork.SaveChanges();
-                ApiResponse apiResponse = new ApiResponse(HttpStatusCode.OK, true, "Proje Detaylari Silindi.", deletedProject);
+                ApiResponse apiResponse = new ApiResponse(HttpStatusCode.OK, true, "Proje Detaylari Silindi.", projectDetailsResponse);
                 return apiResponse;
             }
             catch (Exception ex)
@@ -119,15 +129,16 @@ namespace KafeinPortal.Core.Controllers
 
         }
         [HttpPut]
-        public ActionResult<ApiResponse> UpdateProjectDetail(ProjectDetail projectDetail)
+        public ActionResult<ApiResponse> UpdateProjectDetail(ProjectDetailsRequest projectDetailRequest)
         {
             try
             {
                 _logger.LogDebug("Debug message called UpdateProjectDetail method ProjectdetailsController");
                 _logger.LogInformation("called UpdateProjectDetail method ProjectdetailsController");
+                var projectDetail = _mapper.Map<ProjectDetail>(projectDetailRequest);
                 _projectDetail.Update(projectDetail);
                 _unitOfWork.SaveChanges();
-                ApiResponse apiResponse = new ApiResponse(HttpStatusCode.OK, true, "Proje Detaylari Güncellendi.", projectDetail);
+                ApiResponse apiResponse = new ApiResponse(HttpStatusCode.OK, true, "Proje Detaylari Güncellendi.", projectDetailRequest);
                 return apiResponse;
             }
             catch (Exception ex)
