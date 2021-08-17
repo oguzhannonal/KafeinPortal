@@ -11,11 +11,17 @@ using Microsoft.Extensions.Logging;
 using KafeinPortal.Data.Model.Models;
 using KafeinPortal.Core.Responses;
 using KafeinPortal.Core.Requests;
+using KafeinPortal.Data.Context;
+using Microsoft.EntityFrameworkCore;
+using KafeinPortal.Data.Model.Dtos;
+using Microsoft.AspNetCore.Authorization;
 
 namespace KafeinPortal.Core.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
+
     public class ProjectController : ControllerBase
     {
         private readonly ILogger<Customer> _logger;
@@ -24,10 +30,12 @@ namespace KafeinPortal.Core.Controllers
         private readonly IRepository<Project> _Project;
         private readonly IRepository<ProjectDetail> _projectDetail;
         private readonly IMapper _mapper;
+        private readonly EfContext _context;
 
 
-        public ProjectController(IUnitOfWork unitOfWork, ILogger<Customer> logger, IRepository<Customer> customer,
-            IRepository<Project> Project,IMapper mapper ,IRepository<ProjectDetail> projectDetail)
+
+        public ProjectController(EfContext context, IUnitOfWork unitOfWork, ILogger<Customer> logger, IRepository<Customer> customer,
+            IRepository<Project> Project, IMapper mapper, IRepository<ProjectDetail> projectDetail)
         {
             _mapper = mapper;
             _logger = logger;
@@ -35,6 +43,19 @@ namespace KafeinPortal.Core.Controllers
             _customer = customer;
             _Project = Project;
             _projectDetail = projectDetail;
+            _context = context;
+        }
+        [Route("GetProjectWithDetails")]
+        [HttpGet]
+        public ActionResult<ApiResponse> GetProjectWithDetails(int id)
+        {
+            var projects = _Project.Get(s => id == s.Id);
+            var project = _context.Projects.Where(s => id == s.Id).Include(projectDetails => projectDetails.ProjectDetails).FirstOrDefault();
+            var projectResponse = _mapper.Map<ProjectDto>(project);
+            ApiResponse apiResponse = new ApiResponse(HttpStatusCode.OK, true, "Tüm projeler detaylariyla geldi.", projectResponse);
+
+            return apiResponse;
+
         }
 
         [HttpGet]
@@ -45,7 +66,7 @@ namespace KafeinPortal.Core.Controllers
                 _logger.LogInformation("Called Get method ProjectController");
                 var projects = _Project.GetAll();
                 var projectResponse = _mapper.Map<List<ProjectResponse>>(projects);
-                
+
                 ApiResponse apiResponse = new ApiResponse(HttpStatusCode.OK, true, "Tüm projeler geldi.", projectResponse);
                 _logger.LogDebug("Debug message called get method ProjectController");
 

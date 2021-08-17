@@ -12,12 +12,13 @@ using KafeinPortal.Data.Model.Models;
 using KafeinPortal.Data.Context;
 using KafeinPortal.Core.Responses;
 using KafeinPortal.Core.Requests;
+using Microsoft.AspNetCore.Authorization;
 
 namespace KafeinPortal.Core.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-
+    [Authorize]
     public class ProjectDetailsController : ControllerBase
     {
         private readonly ILogger<ProjectDetailsController> _logger;
@@ -35,6 +36,7 @@ namespace KafeinPortal.Core.Controllers
             _dbContext = dbcontext;
             _mapper = mapper;
         }
+        
         [HttpGet]
         public ActionResult<ApiResponse> Get()
         {

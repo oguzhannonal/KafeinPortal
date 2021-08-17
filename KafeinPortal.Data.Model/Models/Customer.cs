@@ -12,8 +12,7 @@ namespace KafeinPortal.Data.Model.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string Sector { get; set; }
-        [NotMapped]
-       public virtual ICollection<Project> Projects { get; set; }
+       public virtual IEnumerable<Project> Projects { get; set; }
         
 
     }

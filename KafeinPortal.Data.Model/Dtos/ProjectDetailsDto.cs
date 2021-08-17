@@ -18,7 +18,5 @@ namespace KafeinPortal.Data.Model.Dtos
         public int Year { get; set; }
         public Enums.ProductionTime ProductionTime { get; set; } //enum olabilir 
         public Enums.ProjectSize ProjectSize { get; set; } // enum olabilir 
-
-        public virtual Project Project { get; set; }
     }
 }

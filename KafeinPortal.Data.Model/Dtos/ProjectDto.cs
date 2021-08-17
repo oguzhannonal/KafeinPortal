@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace KafeinPortal.Data.Model.Dtos
 {
-    class ProjectDto
+    public class ProjectDto
     {
+        public int Id { get; set; }
+        public int CustomerId { get; set; }
+        public string Name { get; set; }
+        public  ProjectDetailsDto ProjectDetails { get; set; }
+
     }
 }
