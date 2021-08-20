@@ -1,3 +1,5 @@
+using KafeinPortal.Core.BusinessLogic.Interface;
+using KafeinPortal.Core.BusinessLogic.Manager;
 using KafeinPortal.Core.Helpers;
 using KafeinPortal.Data.Context;
 using KafeinPortal.Data.Repositories;
@@ -57,7 +59,9 @@ namespace KafeinPortal.Core
 
             services.AddAutoMapper(typeof(Startup));
             services.AddEntityFrameworkNpgsql().AddDbContext<EfContext>(opt => opt.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
-
+            services.AddTransient<ICustomerLogic,CustomerLogic>();
+            services.AddTransient<IProjectLogic,ProjectLogic>();
+            services.AddTransient<IProjectDetails,ProjectDetailsLogic>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
             services.AddControllers().AddJsonOptions(x =>
