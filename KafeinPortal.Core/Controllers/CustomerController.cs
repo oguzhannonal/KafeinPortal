@@ -46,14 +46,14 @@ namespace KafeinPortal.Core.Controllers
             using (var httpClient = new HttpClient())
             {
                 httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
-                httpClient.DefaultRequestHeaders.Add("Authorization", "Basic a2JpX2NsaWVudDprYmlfc2VjcmV0");
+                httpClient.DefaultRequestHeaders.Add();
 
 
                 var cts = new CancellationTokenSource(new TimeSpan(0, 0, 5));
                 try
                 {
 
-                    using (var response = await httpClient.PostAsync("http://161.35.77.124:8080/portal-api/auth-server/oauth/token", new FormUrlEncodedContent(values), cts.Token).ConfigureAwait(false))
+                    using (var response = await httpClient.PostAsync(, new FormUrlEncodedContent(values), cts.Token).ConfigureAwait(false))
                     {
                         if (response.IsSuccessStatusCode)
                         {
